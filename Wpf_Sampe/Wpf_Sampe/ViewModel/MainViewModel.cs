@@ -11,6 +11,7 @@ namespace Wpf_Sampe.ViewModel
     {
 
         private IEnumerable<Person> _persons;
+        private Person _selectedPerson;
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
@@ -20,6 +21,11 @@ namespace Wpf_Sampe.ViewModel
             Persons = personService.GetPersons();
         }
 
+        public Person SelectedPerson
+        {
+            get { return _selectedPerson; }
+            set { Set(ref _selectedPerson, value); }
+        }
 
         public IEnumerable<Person> Persons
         {

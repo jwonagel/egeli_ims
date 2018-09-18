@@ -8,15 +8,37 @@
         Title="MainWindow" Height="450" Width="800"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
     <Grid>
-        <ListView ItemsSource="{Binding Persons}" Margin="10">
-            <ListView.View>
-                <GridView>
-                    <GridView.Columns>
-                        <GridViewColumn DisplayMemberBinding="{Binding Nachname}" Header="Nachname"></GridViewColumn>
-                        <GridViewColumn DisplayMemberBinding="{Binding Vorname}" Header="Vorname"></GridViewColumn>
-                    </GridView.Columns>
-                </GridView>
-            </ListView.View>
-        </ListView>
+        <StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <ListView ItemsSource="{Binding Persons}" SelectedItem="{Binding SelectedPerson}" Margin="10" Grid.Column="0">
+                <ListView.View>
+                    <GridView>
+                        <GridView.Columns>
+                            <GridViewColumn DisplayMemberBinding="{Binding Nachname}" Header="Nachname"></GridViewColumn>
+                            <GridViewColumn DisplayMemberBinding="{Binding Vorname}" Header="Vorname"></GridViewColumn>
+                        </GridView.Columns>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <Grid Grid.Column="1" Margin="20" Height="60">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Label Content="Vorname"></Label>
+                <Label Content="Nachname" Grid.Row="1" Grid.Column="0"></Label>
+                <TextBox Text="{Binding SelectedPerson.Vorname, Mode=TwoWay}" Grid.Column="1" Grid.Row="0"></TextBox>
+                <TextBox Text="{Binding SelectedPerson.Nachname, Mode=TwoWay}" Grid.Column="1" Grid.Row="1"></TextBox>
+            </Grid>
+     </Grid>
+    </StackPanel>
     </Grid>
 </Window>
