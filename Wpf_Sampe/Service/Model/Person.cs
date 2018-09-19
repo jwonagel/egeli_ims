@@ -12,5 +12,10 @@ namespace Service.Model
         public string Nachname { get; set; }
         public string Vorname { get; set; }
         public Address Address { get; set; }
+
+        public override string ToString()
+        {
+            return $"Id: {Id}  Name: {Nachname} {Vorname} \n" + Address;
+        }
     }
 }

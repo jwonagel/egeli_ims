@@ -17,5 +17,10 @@ namespace Service.Model
         public string Zip { get; set; }
 
         public string City { get; set; }
+
+        public override string ToString()
+        {
+            return $"Address: Id {Id} {Street} {HouseNr} \n {Zip} {City}";
+        }
     }
 }

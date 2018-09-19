@@ -16,36 +16,30 @@ namespace Service.Service
             using (var connection = ConnectionFactory.GetConnection())
             {
                 var command = new SqlCommand(query, connection);
-                var persons = new List<Person>();
 
                 connection.Open();
                 var reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    var id = (int) reader[0];
-                    var vorname = (string) reader[1];
-                    var nachname = (string) reader[2];
-                    var addressId = (int) reader[3];
-                    var street = (string) reader[4];
-                    var houseNr = (string)reader[5];
-                    var zip = (string) reader[6];
-                    var city = (string) reader[7];
-                    var person = new Person
-                    {
-                        Vorname = vorname,
-                        Nachname = nachname,
-                        Id = id,
-                        Address = new Address
-                        {
-                            Id = addressId,
-                            Street = street,
-                            HouseNr = houseNr,
-                            Zip = zip,
-                            City = city
-                        }
-                    };
-                    persons.Add(person);
-                }
+                var persons = MapPersonFromReader(reader);
+                connection.Close();
+                return persons;
+            }
+        }
+
+        public IEnumerable<Person> GetPersonsByName(string name)
+        {
+            var query = @"SELECT P.ID, VORNAME, NACHNAME, a.ID AS ADRESS_ID, STREET, HOUSENUMBER, ZIP, CITY
+                      FROM PERSON AS P INNER JOIN ADDRESS AS A ON P.ID_ADDRESS = A.ID
+                      WHERE NACHNAME = '" + name + "';";
+
+            using (var connection = ConnectionFactory.GetConnection())
+            {
+
+                var command = new SqlCommand(query, connection);
+
+                connection.Open();
+                var reader = command.ExecuteReader();
+                var persons = MapPersonFromReader(reader);
+                connection.Close();
                 return persons;
             }
 
@@ -93,6 +87,38 @@ namespace Service.Service
                 person.Id = Convert.ToInt32(command.ExecuteScalar());
                 connection.Close();
             }
+        }
+
+        private IEnumerable<Person> MapPersonFromReader(SqlDataReader reader)
+        {
+            var persons = new List<Person>();
+            while (reader.Read())
+            {
+                var id = (int)reader[0];
+                var vorname = (string)reader[1];
+                var nachname = (string)reader[2];
+                var addressId = (int)reader[3];
+                var street = (string)reader[4];
+                var houseNr = (string)reader[5];
+                var zip = (string)reader[6];
+                var city = (string)reader[7];
+                var person = new Person
+                {
+                    Vorname = vorname,
+                    Nachname = nachname,
+                    Id = id,
+                    Address = new Address
+                    {
+                        Id = addressId,
+                        Street = street,
+                        HouseNr = houseNr,
+                        Zip = zip,
+                        City = city
+                    }
+                };
+                persons.Add(person);
+            }
+            return persons;
         }
     }
 }
