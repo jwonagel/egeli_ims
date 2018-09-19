@@ -16,18 +16,23 @@ namespace Wpf_Sampe.ViewModel
 
         private ObservableCollection<Person> _persons;
         private Person _selectedPerson;
+        private PersonService _personService;
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
         public MainViewModel()
         {
-            var personService = new PersonService();
-            var persons = personService.GetPersons();
+            _personService = new PersonService();
+            var persons = _personService.GetPersons();
             Persons = new ObservableCollection<Person>(persons);
             AddNewPersonCommand = new RelayCommand(AddNewPerson);
+            StorePersonCommand = new RelayCommand(SaveNewPerson);
         }
 
         public RelayCommand AddNewPersonCommand { get; private set; }
+
+        public RelayCommand StorePersonCommand { get; private set; }
+
 
 
         public Person SelectedPerson
@@ -47,10 +52,17 @@ namespace Wpf_Sampe.ViewModel
             var person = new Person
             {
                 Nachname = "",
-                Vorname = ""
+                Vorname = "",
+                Address = new Address()
             };
             Persons.Add(person);
             SelectedPerson = person;
+        }
+
+        private void SaveNewPerson()
+        {
+            _personService.AddNewPerson(SelectedPerson);
+            Persons = new ObservableCollection<Person>(_personService.GetPersons());
         }
     }
 }

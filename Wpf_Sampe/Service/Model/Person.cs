@@ -11,5 +11,6 @@ namespace Service.Model
         public int Id { get; set; }
         public string Nachname { get; set; }
         public string Vorname { get; set; }
+        public Address Address { get; set; }
     }
 }
