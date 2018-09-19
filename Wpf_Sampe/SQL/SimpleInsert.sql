@@ -1,0 +1,4 @@
+﻿USE Example;
+
+INSERT INTO PERSON (VORNAME, NACHNAME)
+VALUES ('Max', 'Muster');
